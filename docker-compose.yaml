@@ -1,0 +1,9 @@
+services:
+  flowers-database:
+    image: bitnami/postgresql:latest
+    container_name: flowers-database
+    ports:
+      - "5450:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
