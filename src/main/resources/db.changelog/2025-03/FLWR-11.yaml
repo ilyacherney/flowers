@@ -1,0 +1,100 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: icherney
+      changes:
+        - createTable:
+            tableName: cultivars
+            columns:
+              - column:
+                  name: id
+                  type: bigserial
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: price
+                  type: money
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: 2
+      author: icherney
+      changes:
+        - addColumn:
+            tableName: flowers
+            columns:
+              - column:
+                  name: cultivar_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 3
+      author: icherney
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: cultivar_id
+            baseTableName: flowers
+            constraintName: fk_flowers_cultivars
+            onUpdate: CASCADE
+            onDelete: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: cultivars
+
+  - changeSet:
+      id: 4
+      author: ilyacherney
+      changes:
+        - insert:
+            tableName: cultivars
+            columns:
+              - column:
+                  name: name
+                  value: "Эустома"
+              - column:
+                  name: price
+                  valueNumeric: 350.00
+        - insert:
+            tableName: cultivars
+            columns:
+              - column:
+                  name: name
+                  value: "Тюльпан"
+              - column:
+                  name: price
+                  valueNumeric: 140.00
+        - insert:
+            tableName: cultivars
+            columns:
+              - column:
+                  name: name
+                  value: "Лилия"
+              - column:
+                  name: price
+                  valueNumeric: 700.00
+        - insert:
+            tableName: cultivars
+            columns:
+              - column:
+                  name: name
+                  value: "Ромашка"
+              - column:
+                  name: price
+                  valueNumeric: 230.00
+        - insert:
+            tableName: cultivars
+            columns:
+              - column:
+                  name: name
+                  value: "Роза"
+              - column:
+                  name: price
+                  valueNumeric: 300.00
+

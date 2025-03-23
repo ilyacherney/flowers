@@ -7,6 +7,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import ru.ilyacherney.flowers.cultivar.Cultivar;
+
+import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -26,13 +29,14 @@ public class FlowerServiceTest {
     @Test
     public void testCreateFlower() {
         // Assemble
-        when(flowerRepository.save(any(Flower.class))).thenReturn(new Flower());
+        Cultivar cultivar = new Cultivar("Ромашка", new BigDecimal(80.00));
+        when(flowerRepository.save(any(Flower.class))).thenReturn(new Flower(cultivar));
 
         // Act
-        Flower savedFlower = flowerService.createFlower();
+        Flower savedFlower = flowerService.createFlower(cultivar);
 
         // Assert
-        Assertions.assertNotNull(savedFlower);
+        Assertions.assertEquals(cultivar, savedFlower.getCultivar());
         Mockito.verify(flowerRepository, times(1)).save(any(Flower.class));
     }
 

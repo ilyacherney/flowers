@@ -1,6 +1,7 @@
 package ru.ilyacherney.flowers.flower;
 
 import org.springframework.stereotype.Service;
+import ru.ilyacherney.flowers.cultivar.Cultivar;
 
 @Service
 public class FlowerService {
@@ -11,8 +12,8 @@ public class FlowerService {
         this.flowerRepository = flowerRepository;
     }
 
-    public Flower createFlower() {
-        return flowerRepository.save(new Flower());
+    public Flower createFlower(Cultivar cultivar) {
+        return flowerRepository.save(new Flower(cultivar));
     }
 
     public void deleteFlower(Long id) {
