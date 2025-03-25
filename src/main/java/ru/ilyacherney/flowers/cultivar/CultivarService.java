@@ -5,6 +5,7 @@ import ru.ilyacherney.flowers.flower.FlowerRepository;
 import ru.ilyacherney.flowers.flower.FlowerService;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 public class CultivarService {
@@ -29,5 +30,9 @@ public class CultivarService {
             throw new IllegalStateException("Cannot delete cultivar with id " + id + " because there are flowers associated with this cultivar");
         }
         cultivarRepository.deleteById(id);
+    }
+
+    public List<Cultivar> getAllCultivars() {
+        return cultivarRepository.findAll();
     }
 }
