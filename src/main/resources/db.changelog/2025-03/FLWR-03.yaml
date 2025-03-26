@@ -1,0 +1,39 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: icherney
+      changes:
+        - createTable:
+            tableName: bouquets
+            columns:
+              - column:
+                  name: id
+                  type: bigserial
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+  - changeSet:
+      id: 2
+      author: icherney
+      changes:
+        - addColumn:
+            tableName: flowers
+            columns:
+              - column:
+                  name: bouquet_id
+                  type: bigint
+                  constraints:
+                    nullable: true
+  - changeSet:
+      id: 3
+      author: icherney
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: bouquet_id
+            baseTableName: flowers
+            constraintName: fk_flowers_bouquets
+            onUpdate: CASCADE
+            onDelete: SET NULL
+            referencedColumnNames: id
+            referencedTableName: bouquets
