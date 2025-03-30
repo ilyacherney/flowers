@@ -1,5 +1,6 @@
 package ru.ilyacherney.flowers.bouquet;
 
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import ru.ilyacherney.flowers.flower.Flower;
 
@@ -15,20 +16,21 @@ public class BouquetService {
         this.bouquetRepository = bouquetRepository;
     }
 
+    @Transactional
     public Bouquet createBouquet() {
         Bouquet newBouquet = new Bouquet();
-        activeBouquet = bouquetRepository.save(newBouquet);  // Сохраняем новый букет
+        activeBouquet = bouquetRepository.save(newBouquet);
         return activeBouquet;
     }
 
+    @Transactional
     public void addFlowersToBouquet(List<Flower> flowers) {
         if (activeBouquet == null) {
-            activeBouquet = createBouquet();  // Если нет активного букета, создаём новый
+            activeBouquet = createBouquet();
         }
-
-        flowers.forEach(flower -> flower.setBouquet(activeBouquet));  // Устанавливаем букет для каждого цветка
-        activeBouquet.setFlowers(flowers);
-        bouquetRepository.save(activeBouquet);  // Сохраняем букет с добавленными цветами
+        flowers.forEach(flower -> flower.setBouquet(activeBouquet));
+        activeBouquet.getFlowers().addAll(flowers); // Use addAll instead of setFlowers
+        bouquetRepository.save(activeBouquet);
     }
 
     public List<Bouquet> getAllBouquets() {

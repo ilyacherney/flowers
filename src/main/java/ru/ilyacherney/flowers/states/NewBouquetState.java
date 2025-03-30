@@ -4,6 +4,8 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import com.pengrad.telegrambot.model.request.Keyboard;
+import jakarta.transaction.Transactional;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Component;
 import ru.ilyacherney.flowers.bouquet.Bouquet;
 import ru.ilyacherney.flowers.bouquet.BouquetService;
@@ -15,6 +17,7 @@ import ru.ilyacherney.flowers.flower.FlowerService;
 import java.util.List;
 import java.util.Set;
 
+@Transactional
 @Component
 public class NewBouquetState implements State{
 
@@ -30,6 +33,7 @@ public class NewBouquetState implements State{
         this.bouquetService = bouquetService;
     }
 
+    @Transactional
     @Override
     public void handleUpdate(Update update) {
         String data = update.callbackQuery().data();
@@ -37,33 +41,20 @@ public class NewBouquetState implements State{
 
         if (data.startsWith("add_flower_of_cultivar:")) {
             long cultivarId = Long.parseLong(data.substring("add_flower_of_cultivar:".length()));
-
-            // Получаем или создаём активный букет
             Bouquet activeBouquet = bouquetService.getActiveBouquet();
             if (activeBouquet == null) {
-                activeBouquet = bouquetService.createBouquet();  // Если букета нет, создаём новый
+                activeBouquet = bouquetService.createBouquet();
             }
-
             addFlowerOfCultivar(activeBouquet, cultivarId);
+            render(chatId, update.callbackQuery().message().messageId()); // Re-render after adding
         }
     }
-
 
     private void addFlowerOfCultivar(Bouquet activeBouquet, long cultivarId) {
-        Cultivar cultivar = cultivarService.getCultivarById(cultivarId);
-        Set<Flower> cultivarFlowers = cultivar.getFlowers();
-
-        for (Flower flower : cultivarFlowers) {
-            if (flower.getBouquet() == null) {
-                flower.setBouquet(activeBouquet);
-                bouquetService.addFlowersToBouquet(List.of(flower));
-            }
-        }
-
-
+        Flower flower = flowerService.findAvailableFlowerByCultivarId(cultivarId);
+        flower.setBouquet(activeBouquet);
+        bouquetService.addFlowersToBouquet(List.of(flower));
     }
-
-
 
     @Override
     public void render(long chatId, int editingMessageId) {

@@ -26,7 +26,7 @@ public class Cultivar {
     @Column(name = "price")
     private BigDecimal price;
 
-    @OneToMany(mappedBy = "cultivar", cascade = CascadeType.ALL, orphanRemoval = false)
+    @OneToMany(mappedBy = "cultivar", cascade = CascadeType.ALL, orphanRemoval = false, fetch = FetchType.LAZY)
     private Set<Flower> flowers = new HashSet<>();
 
     public Cultivar(String name, BigDecimal price) {
