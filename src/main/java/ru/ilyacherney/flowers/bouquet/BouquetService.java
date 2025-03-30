@@ -9,23 +9,39 @@ import java.util.List;
 public class BouquetService {
 
     private final BouquetRepository bouquetRepository;
+    private Bouquet activeBouquet = null;
 
     public BouquetService(BouquetRepository bouquetRepository) {
         this.bouquetRepository = bouquetRepository;
     }
 
     public Bouquet createBouquet() {
-        return bouquetRepository.save(new Bouquet());
+        Bouquet newBouquet = new Bouquet();
+        activeBouquet = bouquetRepository.save(newBouquet);  // Сохраняем новый букет
+        return activeBouquet;
     }
 
-    public void addFlowersToBouquet(List<Flower> flowers, Bouquet bouquet) {
-        flowers.forEach(flower -> flower.setBouquet(bouquet));
-        bouquet.setFlowers(flowers);
-        bouquetRepository.save(bouquet);
+    public void addFlowersToBouquet(List<Flower> flowers) {
+        if (activeBouquet == null) {
+            activeBouquet = createBouquet();  // Если нет активного букета, создаём новый
+        }
+
+        flowers.forEach(flower -> flower.setBouquet(activeBouquet));  // Устанавливаем букет для каждого цветка
+        activeBouquet.setFlowers(flowers);
+        bouquetRepository.save(activeBouquet);  // Сохраняем букет с добавленными цветами
     }
 
     public List<Bouquet> getAllBouquets() {
         return (List<Bouquet>) bouquetRepository.findAll();
+    }
+
+
+    public Bouquet getActiveBouquet() {
+        return activeBouquet;
+    }
+
+    public Long getActiveBouquetId() {
+        return activeBouquet != null ? activeBouquet.getId() : null;
     }
 
 }

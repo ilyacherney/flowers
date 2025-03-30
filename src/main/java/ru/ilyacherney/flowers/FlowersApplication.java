@@ -24,17 +24,17 @@ public class FlowersApplication {
     @Bean
     CommandLineRunner runner(BouquetService bouquetService, FlowerService flowerService, CultivarService cultivarService) {
         return args -> {
-            Bouquet bouquet = bouquetService.createBouquet();
-            System.out.println(bouquet);
-
-            List<Cultivar> cultivars = cultivarService.getAllCultivars();
-
-            Flower flower1 = flowerService.createFlower(cultivars.get(0));
-            Flower flower2 = flowerService.createFlower(cultivars.get(1));
-            Flower flower3 = flowerService.createFlower(cultivars.get(1));
-            List<Flower> flowers = Arrays.asList(flower1, flower2, flower3);
-
-            bouquetService.addFlowersToBouquet(flowers, bouquet);
+//            Bouquet bouquet = bouquetService.createBouquet();
+//            System.out.println(bouquet);
+//
+//            List<Cultivar> cultivars = cultivarService.getAllCultivars();
+//
+//            Flower flower1 = flowerService.createFlower(cultivars.get(0));
+//            Flower flower2 = flowerService.createFlower(cultivars.get(1));
+//            Flower flower3 = flowerService.createFlower(cultivars.get(1));
+//            List<Flower> flowers = Arrays.asList(flower1, flower2, flower3);
+//
+//            bouquetService.addFlowersToBouquet(flowers);
 
         };
     }
