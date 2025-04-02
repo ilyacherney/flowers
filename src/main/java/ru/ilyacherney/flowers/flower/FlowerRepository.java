@@ -13,6 +13,6 @@ public interface FlowerRepository extends JpaRepository<Flower, Long> {
     boolean existsById(Long id);
     boolean existsByCultivarId(Long id);
 
-    @Query("SELECT f FROM Flower f WHERE f.cultivar.id = :cultivarId AND f.bouquet.id IS NULL")
+    @Query(value = "SELECT * FROM flowers f WHERE f.cultivar_id = :cultivarId AND f.bouquet_id IS NULL LIMIT 1", nativeQuery = true)
     Optional<Flower> findFirstByCultivarIdAndBouquetIsNull(Long cultivarId);
 }
