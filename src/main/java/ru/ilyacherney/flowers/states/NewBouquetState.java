@@ -33,27 +33,14 @@ public class NewBouquetState implements State{
         this.bouquetService = bouquetService;
     }
 
-    @Transactional
     @Override
     public void handleUpdate(Update update) {
         String data = update.callbackQuery().data();
-        long chatId = update.callbackQuery().message().chat().id();
 
         if (data.startsWith("add_flower_of_cultivar:")) {
             long cultivarId = Long.parseLong(data.substring("add_flower_of_cultivar:".length()));
-            Bouquet activeBouquet = bouquetService.getActiveBouquet();
-            if (activeBouquet == null) {
-                activeBouquet = bouquetService.createBouquet();
-            }
-            addFlowerOfCultivar(activeBouquet, cultivarId);
-            render(chatId, update.callbackQuery().message().messageId()); // Re-render after adding
+            bouquetService.addFlowerToBouquet(cultivarId);
         }
-    }
-
-    private void addFlowerOfCultivar(Bouquet activeBouquet, long cultivarId) {
-        Flower flower = flowerService.findAvailableFlowerByCultivarId(cultivarId);
-        flower.setBouquet(activeBouquet);
-        bouquetService.addFlowersToBouquet(List.of(flower));
     }
 
     @Override
@@ -63,6 +50,9 @@ public class NewBouquetState implements State{
 
     @Override
     public String getDisplayName() {
+//        if (bouquetService.getActiveBouquet() != null) {
+//            return bouquetService.getActiveBouquet().toString();
+//        }
         return "Выберете цветы:";
     }
 

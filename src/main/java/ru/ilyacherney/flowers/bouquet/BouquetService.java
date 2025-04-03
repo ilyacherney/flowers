@@ -3,6 +3,7 @@ package ru.ilyacherney.flowers.bouquet;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import ru.ilyacherney.flowers.flower.Flower;
+import ru.ilyacherney.flowers.flower.FlowerRepository;
 
 import java.util.List;
 
@@ -10,10 +11,12 @@ import java.util.List;
 public class BouquetService {
 
     private final BouquetRepository bouquetRepository;
+    private final FlowerRepository flowerRepository;
     private Bouquet activeBouquet = null;
 
-    public BouquetService(BouquetRepository bouquetRepository) {
+    public BouquetService(BouquetRepository bouquetRepository, FlowerRepository flowerRepository) {
         this.bouquetRepository = bouquetRepository;
+        this.flowerRepository = flowerRepository;
     }
 
     @Transactional
@@ -24,13 +27,15 @@ public class BouquetService {
     }
 
     @Transactional
-    public void addFlowersToBouquet(List<Flower> flowers) {
+    public void addFlowerToBouquet(long cultivarId) {
         if (activeBouquet == null) {
             activeBouquet = createBouquet();
         }
-        flowers.forEach(flower -> flower.setBouquet(activeBouquet));
-        activeBouquet.getFlowers().addAll(flowers); // Use addAll instead of setFlowers
-        bouquetRepository.save(activeBouquet);
+        Flower flower = flowerRepository.findFirstByCultivarIdAndBouquetIsNull(cultivarId)
+                .orElseThrow(() -> new RuntimeException("Flower with no bouquet and cultivar id = " + cultivarId + " not found"));
+
+        flower.setBouquet(activeBouquet);
+        flowerRepository.save(flower); // Сохраняем только flower, Hibernate сам обновит связь
     }
 
     public List<Bouquet> getAllBouquets() {
