@@ -23,4 +23,9 @@ public class FlowerService {
             throw new IllegalArgumentException("Flower with ID " + id + " not found.");
         }
     }
+
+    public Flower findAvailableFlowerByCultivarId(Long cultivarId) {
+        return flowerRepository.findFirstByCultivarIdAndBouquetIsNull(cultivarId)
+                .orElseThrow(() -> new IllegalStateException("No available flowers for cultivar ID " + cultivarId));
+    }
 }

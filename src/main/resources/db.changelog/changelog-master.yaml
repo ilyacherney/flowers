@@ -3,3 +3,5 @@ databaseChangeLog:
       file: db.changelog/2025-03/FLWR-02.yaml
   - include:
       file: db.changelog/2025-03/FLWR-11.yaml
+  - include:
+      file: db.changelog/2025-03/FLWR-03.yaml

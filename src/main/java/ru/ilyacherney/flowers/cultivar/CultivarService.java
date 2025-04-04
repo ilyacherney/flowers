@@ -35,4 +35,8 @@ public class CultivarService {
     public List<Cultivar> getAllCultivars() {
         return cultivarRepository.findAll();
     }
+
+    public Cultivar getCultivarById(Long id) {
+        return cultivarRepository.findById(id).get();
+    }
 }
