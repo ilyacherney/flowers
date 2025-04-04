@@ -10,6 +10,7 @@ import ru.ilyacherney.flowers.cultivar.Cultivar;
 import ru.ilyacherney.flowers.cultivar.CultivarService;
 import ru.ilyacherney.flowers.flower.Flower;
 import ru.ilyacherney.flowers.flower.FlowerService;
+import ru.ilyacherney.flowers.sales.SaleService;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,20 +23,10 @@ public class FlowersApplication {
     }
 
     @Bean
-    CommandLineRunner runner(BouquetService bouquetService, FlowerService flowerService, CultivarService cultivarService) {
+    CommandLineRunner runner(BouquetService bouquetService, FlowerService flowerService, CultivarService cultivarService, SaleService saleService) {
         return args -> {
-//            Bouquet bouquet = bouquetService.createBouquet();
-//            System.out.println(bouquet);
-//
-//            List<Cultivar> cultivars = cultivarService.getAllCultivars();
-//
-//            Flower flower1 = flowerService.createFlower(cultivars.get(0));
-//            Flower flower2 = flowerService.createFlower(cultivars.get(1));
-//            Flower flower3 = flowerService.createFlower(cultivars.get(1));
-//            List<Flower> flowers = Arrays.asList(flower1, flower2, flower3);
-//
-//            bouquetService.addFlowersToBouquet(flowers);
-
+            Bouquet bouquet = bouquetService.getAllBouquets().getFirst();
+            saleService.sale(bouquet);
         };
     }
 }
