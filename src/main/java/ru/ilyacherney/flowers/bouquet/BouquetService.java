@@ -12,7 +12,7 @@ public class BouquetService {
 
     private final BouquetRepository bouquetRepository;
     private final FlowerRepository flowerRepository;
-    private Bouquet activeBouquet = null;
+    public Bouquet activeBouquet = null;
 
     public BouquetService(BouquetRepository bouquetRepository, FlowerRepository flowerRepository) {
         this.bouquetRepository = bouquetRepository;
@@ -36,6 +36,19 @@ public class BouquetService {
 
         flower.setBouquet(activeBouquet);
         flowerRepository.save(flower); // Сохраняем только flower, Hibernate сам обновит связь
+    }
+
+    @Transactional
+    public void removeFlowerFromBouquet(long cultivarId) {
+        if (activeBouquet == null) {
+            return;
+        }
+
+        Flower flower = flowerRepository.findFirstByCultivarIdAndBouquetId(cultivarId, getActiveBouquetId())
+                .orElseThrow(() -> new RuntimeException("Flower with bouquet id = " + getActiveBouquetId() + " and cultivar id = " + cultivarId + " not found"));
+
+        flower.setBouquet(null);
+        flowerRepository.save(flower);
     }
 
     public List<Bouquet> getAllBouquets() {

@@ -15,4 +15,7 @@ public interface FlowerRepository extends JpaRepository<Flower, Long> {
 
     @Query(value = "SELECT * FROM flowers f WHERE f.cultivar_id = :cultivarId AND f.bouquet_id IS NULL LIMIT 1", nativeQuery = true)
     Optional<Flower> findFirstByCultivarIdAndBouquetIsNull(Long cultivarId);
+
+    @Query(value = "SELECT * FROM flowers f WHERE f.cultivar_id = :cultivarId AND f.bouquet_id = :bouquetId LIMIT 1", nativeQuery = true)
+    Optional<Flower> findFirstByCultivarIdAndBouquetId(Long cultivarId, Long bouquetId);
 }

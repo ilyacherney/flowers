@@ -41,6 +41,11 @@ public class NewBouquetState implements State{
             long cultivarId = Long.parseLong(data.substring("add_flower_of_cultivar:".length()));
             bouquetService.addFlowerToBouquet(cultivarId);
         }
+
+        if (data.startsWith("remove_flower_of_cultivar:")) {
+            long cultivarId = Long.parseLong(data.substring("remove_flower_of_cultivar:".length()));
+            bouquetService.removeFlowerFromBouquet(cultivarId);
+        }
     }
 
     @Override
@@ -64,7 +69,7 @@ public class NewBouquetState implements State{
 
         List<Cultivar> cultivars = cultivarService.getAllCultivars();
         for (Cultivar cultivar : cultivars) {
-            InlineKeyboardButton minusButton = new InlineKeyboardButton("-").callbackData("- " + cultivar.getName());
+            InlineKeyboardButton minusButton = new InlineKeyboardButton("-").callbackData("remove_flower_of_cultivar:" + cultivar.getId());
             InlineKeyboardButton cultivarButton = new InlineKeyboardButton(cultivar.getName()).callbackData(cultivar.getName());
             InlineKeyboardButton plusButton = new InlineKeyboardButton("+").callbackData("add_flower_of_cultivar:" + cultivar.getId());
             inlineKeyboardMarkup.addRow(minusButton, cultivarButton, plusButton);
