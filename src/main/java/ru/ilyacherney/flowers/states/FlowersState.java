@@ -31,6 +31,7 @@ public class FlowersState implements State {
     public InlineKeyboardMarkup getInlineKeyboardMarkup() {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Меню").callbackData("start"));
+        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Добавить цветы").callbackData("add_flowers"));
         return inlineKeyboardMarkup;
     }
 

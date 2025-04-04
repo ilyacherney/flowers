@@ -1,8 +1,10 @@
 package ru.ilyacherney.flowers.states;
 
 import com.pengrad.telegrambot.TelegramBot;
+import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import com.pengrad.telegrambot.model.request.ParseMode;
+import com.pengrad.telegrambot.request.AnswerCallbackQuery;
 import com.pengrad.telegrambot.request.EditMessageText;
 import com.pengrad.telegrambot.request.SendMessage;
 import org.springframework.stereotype.Service;
@@ -39,5 +41,19 @@ public class StateRenderer {
                 .replyMarkup(keyboard);
 
         bot.execute(sendMessage);
+    }
+
+    // Для редактирования сообщения с подтверждением callback
+    public void render(State state, long chatId, int editingMessageId, CallbackQuery callbackQuery) {
+        EditMessageText editMessageText = new EditMessageText(chatId, editingMessageId, state.getDisplayName())
+                .parseMode(ParseMode.HTML)
+                .replyMarkup(state.getInlineKeyboardMarkup());
+        bot.execute(editMessageText);
+
+        // Подтверждаем callback, если он передан
+        if (callbackQuery != null) {
+            AnswerCallbackQuery answer = new AnswerCallbackQuery(callbackQuery.id());
+            bot.execute(answer);
+        }
     }
 }
