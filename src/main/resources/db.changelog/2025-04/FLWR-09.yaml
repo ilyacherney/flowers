@@ -1,0 +1,29 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: icherney
+      changes:
+        - createTable:
+            tableName: sales
+            columns:
+              - column:
+                  name: id
+                  type: bigserial
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: bouquet_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: sold_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: price
+                  type: numeric(10,2)
+                  constraints:
+                    nullable: false
