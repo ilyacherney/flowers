@@ -38,4 +38,8 @@ public class FlowerService {
     public void deleteFlower(Flower flower) {
         flowerRepository.delete(flower);
     }
+
+    public int countByCultivarIdAndBouquetIdIsNull(Long cultivarId) {
+        return flowerRepository.countByCultivarIdAndBouquetIdIsNull(cultivarId);
+    }
 }

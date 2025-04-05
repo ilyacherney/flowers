@@ -21,4 +21,6 @@ public interface FlowerRepository extends JpaRepository<Flower, Long> {
     Optional<Flower> findFirstByCultivarIdAndBouquetId(Long cultivarId, Long bouquetId);
 
     List<Flower> findAllByBouquetId(Long bouquetId);
+
+    int countByCultivarIdAndBouquetIdIsNull(Long cultivarId);
 }
