@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import ru.ilyacherney.flowers.flower.Flower;
 import ru.ilyacherney.flowers.flower.FlowerRepository;
+import ru.ilyacherney.flowers.flower.FlowerService;
 
 import java.util.List;
 
@@ -12,11 +13,13 @@ public class BouquetService {
 
     private final BouquetRepository bouquetRepository;
     private final FlowerRepository flowerRepository;
+    private final FlowerService flowerService;
     public Bouquet activeBouquet = null;
 
-    public BouquetService(BouquetRepository bouquetRepository, FlowerRepository flowerRepository) {
+    public BouquetService(BouquetRepository bouquetRepository, FlowerRepository flowerRepository, FlowerService flowerService) {
         this.bouquetRepository = bouquetRepository;
         this.flowerRepository = flowerRepository;
+        this.flowerService = flowerService;
     }
 
     @Transactional
@@ -62,6 +65,18 @@ public class BouquetService {
 
     public Long getActiveBouquetId() {
         return activeBouquet != null ? activeBouquet.getId() : null;
+    }
+
+    public void deleteBouquet(Bouquet bouquet) {
+        List<Flower> flowers = flowerService.findAllByBouquetId(bouquet.getId());
+        for (Flower flower : flowers) {
+            flowerService.deleteFlower(flower);
+        }
+        bouquetRepository.delete(bouquet);
+    }
+
+    public Bouquet getBouquetById(long id) {
+        return bouquetRepository.findById(id).orElse(null);
     }
 
 }
