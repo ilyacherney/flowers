@@ -15,8 +15,9 @@ public class BotContext {
     private final BouqetsState bouqetsState;
     private final NewBouquetState newBouquetState;
     private final AddFlowersState addFlowersState;
+    private final SalesState salesState;
 
-    public BotContext(StartState startState, FlowersState flowersState, BouqetsState bouqetsState, NewBouquetState newBouquetState, AddFlowersState addFlowersState) {
+    public BotContext(StartState startState, FlowersState flowersState, BouqetsState bouqetsState, NewBouquetState newBouquetState, AddFlowersState addFlowersState, SalesState salesState) {
         this.state = startState;
 
         this.startState = startState;
@@ -24,6 +25,7 @@ public class BotContext {
         this.bouqetsState = bouqetsState;
         this.newBouquetState = newBouquetState;
         this.addFlowersState = addFlowersState;
+        this.salesState = salesState;
     }
 
     public void setState(State state) {
@@ -60,6 +62,11 @@ public class BotContext {
             if (callbackQuery.data().equals("add_flowers")) {
                 setState(addFlowersState);
                 addFlowersState.render(chatId, editingMessageId);
+            }
+
+            if (callbackQuery.data().equals("sales")) {
+                setState(salesState);
+                salesState.render(chatId, editingMessageId);
             }
 
             state.handleUpdate(update);

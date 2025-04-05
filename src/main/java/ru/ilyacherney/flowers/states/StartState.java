@@ -38,6 +38,7 @@ public class StartState implements State {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Цветы").callbackData("flowers"));
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Букеты").callbackData("bouquets"));
+        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Продажи").callbackData("sales"));
         return inlineKeyboardMarkup;
     }
 

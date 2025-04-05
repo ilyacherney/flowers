@@ -25,8 +25,8 @@ public class FlowersApplication {
     @Bean
     CommandLineRunner runner(BouquetService bouquetService, FlowerService flowerService, CultivarService cultivarService, SaleService saleService) {
         return args -> {
-            Bouquet bouquet = bouquetService.getAllBouquets().getFirst();
-            saleService.sale(bouquet);
+//            Bouquet bouquet = bouquetService.getAllBouquets().getFirst();
+//            saleService.sale(bouquet);
         };
     }
 }

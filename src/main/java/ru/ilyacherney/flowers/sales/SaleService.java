@@ -6,6 +6,7 @@ import ru.ilyacherney.flowers.bouquet.Bouquet;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class SaleService {
@@ -23,5 +24,9 @@ public class SaleService {
         sale.setBouquetId(bouquet.getId());
         sale.setSoldAt(LocalDateTime.now());
         saleRepository.save(sale);
+    }
+
+    public List<Sale> getAllSales() {
+        return saleRepository.findAll();
     }
 }
