@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import ru.ilyacherney.flowers.bouquet.BouqetsState;
 import ru.ilyacherney.flowers.bouquet.NewBouquetState;
 import ru.ilyacherney.flowers.flower.FlowersState;
+import ru.ilyacherney.flowers.sales.SalesState;
 
 @Component
 @Data

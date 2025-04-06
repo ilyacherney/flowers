@@ -28,7 +28,7 @@ public class SaleService {
 
     private void createSale(Bouquet bouquet) {
         Sale sale = new Sale();
-        sale.setPrice(new BigDecimal(100));
+        sale.setPrice(bouquetService.calculatePrice(bouquet));
         sale.setBouquetId(bouquet.getId());
         sale.setSoldAt(LocalDateTime.now());
         saleRepository.save(sale);
