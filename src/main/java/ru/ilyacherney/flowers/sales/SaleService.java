@@ -3,7 +3,6 @@ package ru.ilyacherney.flowers.sales;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import ru.ilyacherney.flowers.bouquet.Bouquet;
-import ru.ilyacherney.flowers.bouquet.BouquetRepository;
 import ru.ilyacherney.flowers.bouquet.BouquetService;
 
 import java.math.BigDecimal;
@@ -24,7 +23,7 @@ public class SaleService {
     @Transactional
     public void sale(Bouquet bouquet) {
         createSale(bouquet);
-        bouquetService.deleteBouquet(bouquet);
+        bouquetService.deleteBouquetAndItsFlowers(bouquet);
     }
 
     private void createSale(Bouquet bouquet) {

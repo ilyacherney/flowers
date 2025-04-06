@@ -4,6 +4,8 @@ import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.model.Update;
 import lombok.Data;
 import org.springframework.stereotype.Component;
+import ru.ilyacherney.flowers.bouquet.BouqetsState;
+import ru.ilyacherney.flowers.bouquet.NewBouquetState;
 import ru.ilyacherney.flowers.flower.FlowersState;
 
 @Component
