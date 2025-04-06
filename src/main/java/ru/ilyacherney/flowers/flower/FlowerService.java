@@ -1,5 +1,6 @@
 package ru.ilyacherney.flowers.flower;
 
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import ru.ilyacherney.flowers.cultivar.Cultivar;
 
@@ -41,5 +42,11 @@ public class FlowerService {
 
     public int countByCultivarIdAndBouquetIdIsNull(Long cultivarId) {
         return flowerRepository.countByCultivarIdAndBouquetIdIsNull(cultivarId);
+    }
+
+    @Transactional
+    public void deleteByCultivarId(Long cultivarId) {
+        Flower flower = findAvailableFlowerByCultivarId(cultivarId);
+        flowerRepository.delete(flower);
     }
 }
