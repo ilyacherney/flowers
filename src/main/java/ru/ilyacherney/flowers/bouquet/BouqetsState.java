@@ -1,14 +1,13 @@
-package ru.ilyacherney.flowers.states;
+package ru.ilyacherney.flowers.bouquet;
 
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import org.springframework.stereotype.Component;
-import ru.ilyacherney.flowers.bouquet.Bouquet;
-import ru.ilyacherney.flowers.bouquet.BouquetService;
-import ru.ilyacherney.flowers.cultivar.Cultivar;
 import ru.ilyacherney.flowers.sales.SaleService;
+import ru.ilyacherney.flowers.states.State;
+import ru.ilyacherney.flowers.states.StateRenderer;
 
 
 @Component
@@ -47,6 +46,14 @@ public class BouqetsState implements State {
             // Рендерим с callbackQuery для подтверждения
             renderer.render(this, chatId, editingMessageId, update.callbackQuery());
         }
+
+        if (data.startsWith("disassemble:")) {
+            long bouquetId = Long.parseLong(data.substring("disassemble:".length()));
+            Bouquet bouquet = bouquetService.getBouquetById(bouquetId);
+            bouquetService.deleteBouquet(bouquet);
+            // Рендерим с callbackQuery для подтверждения
+            renderer.render(this, chatId, editingMessageId, update.callbackQuery());
+        }
     }
 
     @Override
@@ -54,14 +61,16 @@ public class BouqetsState implements State {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 
         bouquetService.getAllBouquets().forEach(bouquet -> {
-                InlineKeyboardButton bouquetButton = new InlineKeyboardButton(Long.toString(bouquet.getId())).callbackData(Long.toString(bouquet.getId()));
+                InlineKeyboardButton bouquetButton = new InlineKeyboardButton("Букет " + bouquet.getId()).callbackData(Long.toString(bouquet.getId()));
+                InlineKeyboardButton price = new InlineKeyboardButton(bouquetService.calculatePrice(bouquet) + " руб.").callbackData("цена:" + Long.toString(bouquet.getId()));
+                InlineKeyboardButton disassemble = new InlineKeyboardButton("Разобрать").callbackData("disassemble:" + Long.toString(bouquet.getId()));
                 InlineKeyboardButton saleButton = new InlineKeyboardButton("Продать").callbackData("sale:" + Long.toString(bouquet.getId()));
-                inlineKeyboardMarkup.addRow(bouquetButton, saleButton);
+                inlineKeyboardMarkup.addRow(bouquetButton, price, disassemble, saleButton);
             }
         );
 
-        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Меню").callbackData("start"));
-        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Новый букет").callbackData("new_bouquet"));
+        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("+ Создать").callbackData("new_bouquet"), new InlineKeyboardButton(" ").callbackData("1"), new InlineKeyboardButton(" ").callbackData("2"), new InlineKeyboardButton(" ").callbackData("3"));
+        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("« Назад").callbackData("start"));
         return inlineKeyboardMarkup;
     }
 

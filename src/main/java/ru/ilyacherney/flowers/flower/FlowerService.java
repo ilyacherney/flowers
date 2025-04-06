@@ -44,6 +44,10 @@ public class FlowerService {
         return flowerRepository.countByCultivarIdAndBouquetIdIsNull(cultivarId);
     }
 
+    public int countByBouquetIdAndCultivarId (Long bouquetId, Long cultivarId) {
+        return flowerRepository.countByBouquetIdAndCultivarId(bouquetId, cultivarId);
+    }
+
     @Transactional
     public void deleteByCultivarId(Long cultivarId) {
         Flower flower = findAvailableFlowerByCultivarId(cultivarId);
