@@ -4,6 +4,7 @@ import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.model.Update;
 import lombok.Data;
 import org.springframework.stereotype.Component;
+import ru.ilyacherney.flowers.flower.FlowersState;
 
 @Component
 @Data
@@ -14,17 +15,15 @@ public class BotContext {
     private final FlowersState flowersState;
     private final BouqetsState bouqetsState;
     private final NewBouquetState newBouquetState;
-    private final AddFlowersState addFlowersState;
     private final SalesState salesState;
 
-    public BotContext(StartState startState, FlowersState flowersState, BouqetsState bouqetsState, NewBouquetState newBouquetState, AddFlowersState addFlowersState, SalesState salesState) {
+    public BotContext(StartState startState, FlowersState flowersState, BouqetsState bouqetsState, NewBouquetState newBouquetState, SalesState salesState) {
         this.state = startState;
 
         this.startState = startState;
         this.flowersState = flowersState;
         this.bouqetsState = bouqetsState;
         this.newBouquetState = newBouquetState;
-        this.addFlowersState = addFlowersState;
         this.salesState = salesState;
     }
 
@@ -59,10 +58,6 @@ public class BotContext {
                 newBouquetState.render(chatId, editingMessageId);
             }
 
-            if (callbackQuery.data().equals("add_flowers")) {
-                setState(addFlowersState);
-                addFlowersState.render(chatId, editingMessageId);
-            }
 
             if (callbackQuery.data().equals("sales")) {
                 setState(salesState);

@@ -1,28 +1,37 @@
-package ru.ilyacherney.flowers.states;
+package ru.ilyacherney.flowers.flower;
 
+import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import org.springframework.stereotype.Component;
 import ru.ilyacherney.flowers.cultivar.Cultivar;
 import ru.ilyacherney.flowers.cultivar.CultivarService;
-import ru.ilyacherney.flowers.flower.FlowerService;
+import ru.ilyacherney.flowers.states.State;
+import ru.ilyacherney.flowers.states.StateRenderer;
 
 import java.util.List;
 
 @Component
-public class AddFlowersState implements State {
+public class FlowersState implements State {
 
+    private final TelegramBot bot;
     private final StateRenderer renderer;
     private final CultivarService cultivarService;
     private final FlowerService flowerService;
 
     private int editingMessageId;
 
-    public AddFlowersState(StateRenderer renderer, CultivarService cultivarService, FlowerService flowerService) {
+    public FlowersState(TelegramBot bot, StateRenderer renderer, CultivarService cultivarService, FlowerService flowerService) {
+        this.bot = bot;
         this.renderer = renderer;
         this.cultivarService = cultivarService;
         this.flowerService = flowerService;
+    }
+
+    @Override
+    public String getDisplayName() {
+        return "Цветы";
     }
 
     @Override
@@ -39,18 +48,16 @@ public class AddFlowersState implements State {
             // Рендерим с callbackQuery для подтверждения
             renderer.render(this, chatId, editingMessageId, update.callbackQuery());
         }
+
+        if (data.startsWith("remove_flower_of_cultivar_id:")) {
+            long cultivarId = Long.parseLong(data.substring("remove_flower_of_cultivar_id:".length()));
+            Cultivar cultivar = cultivarService.getCultivarById(cultivarId);
+            flowerService.deleteByCultivarId(cultivar.getId());
+            // Рендерим с callbackQuery для подтверждения
+            renderer.render(this, chatId, editingMessageId, update.callbackQuery());
+        }
     }
 
-    @Override
-    public void render(long chatId, int editingMessageId) {
-        this.editingMessageId = editingMessageId;
-        renderer.render(this, chatId, editingMessageId);
-    }
-
-    @Override
-    public String getDisplayName() {
-        return "Здесь вы можете добавить цветы в наличие";
-    }
 
     @Override
     public InlineKeyboardMarkup getInlineKeyboardMarkup() {
@@ -59,10 +66,20 @@ public class AddFlowersState implements State {
         List<Cultivar> cultivars = cultivarService.getAllCultivars();
         for (Cultivar cultivar : cultivars) {
             InlineKeyboardButton cultivarButton = new InlineKeyboardButton(cultivar.getName()).callbackData(cultivar.getName());
+            InlineKeyboardButton minusButton = new InlineKeyboardButton("-").callbackData("remove_flower_of_cultivar_id:" + cultivar.getId());
+            InlineKeyboardButton countButton = new InlineKeyboardButton(String.valueOf(flowerService.countByCultivarIdAndBouquetIdIsNull(cultivar.getId())) + " шт.").callbackData(String.valueOf(cultivar.getId()));
             InlineKeyboardButton plusButton = new InlineKeyboardButton("+").callbackData("add_flower_of_cultivar_id:" + cultivar.getId());
-            inlineKeyboardMarkup.addRow(cultivarButton, plusButton);
+            InlineKeyboardButton priceButton = new InlineKeyboardButton(cultivar.getPrice() + " руб.").callbackData(String.valueOf(cultivar.getId()));
+            inlineKeyboardMarkup.addRow(cultivarButton, minusButton, countButton, plusButton, priceButton);
         }
 
+        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("« Назад").callbackData("start"));
         return inlineKeyboardMarkup;
+    }
+
+    @Override
+    public void render(long chatId, int editingMessageId) {
+        this.editingMessageId = editingMessageId;
+        renderer.render((State) this, chatId, editingMessageId);
     }
 }
