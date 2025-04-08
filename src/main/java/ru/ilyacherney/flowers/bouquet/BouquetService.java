@@ -43,7 +43,7 @@ public class BouquetService {
                 .orElseThrow(() -> new RuntimeException("Flower with no bouquet and cultivar id = " + cultivarId + " not found"));
 
         flower.setBouquet(activeBouquet);
-        flowerRepository.save(flower); // Сохраняем только flower, Hibernate сам обновит связь
+        flowerRepository.save(flower);
     }
 
     @Transactional
@@ -85,7 +85,6 @@ public class BouquetService {
         bouquet = bouquetRepository.findById(bouquet.getId())
                 .orElseThrow(() -> new IllegalArgumentException("Букет не найден"));
 
-        // Принудительно инициализируем коллекцию цветов
         bouquet.getFlowers().size();
 
         for (Flower flower : bouquet.getFlowers()) {
