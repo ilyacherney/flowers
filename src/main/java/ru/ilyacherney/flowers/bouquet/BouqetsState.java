@@ -43,7 +43,6 @@ public class BouqetsState implements State {
             long bouquetId = Long.parseLong(data.substring("sale:".length()));
             Bouquet bouquet = bouquetService.getBouquetById(bouquetId);
             saleService.sale(bouquet);
-            // Рендерим с callbackQuery для подтверждения
             renderer.render(this, chatId, editingMessageId, update.callbackQuery());
         }
 
@@ -51,7 +50,6 @@ public class BouqetsState implements State {
             long bouquetId = Long.parseLong(data.substring("disassemble:".length()));
             Bouquet bouquet = bouquetService.getBouquetById(bouquetId);
             bouquetService.deleteBouquet(bouquet);
-            // Рендерим с callbackQuery для подтверждения
             renderer.render(this, chatId, editingMessageId, update.callbackQuery());
         }
     }

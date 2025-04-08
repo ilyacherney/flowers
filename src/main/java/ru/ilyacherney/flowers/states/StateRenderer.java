@@ -30,7 +30,6 @@ public class StateRenderer {
         bot.execute(editMessageText);
     }
 
-
     public void render(State state, long chatId) {
         SendMessage message = new SendMessage(chatId, state.getDisplayName());
         message.parseMode(ParseMode.HTML);
@@ -43,14 +42,12 @@ public class StateRenderer {
         bot.execute(sendMessage);
     }
 
-    // Для редактирования сообщения с подтверждением callback
     public void render(State state, long chatId, int editingMessageId, CallbackQuery callbackQuery) {
         EditMessageText editMessageText = new EditMessageText(chatId, editingMessageId, state.getDisplayName())
                 .parseMode(ParseMode.HTML)
                 .replyMarkup(state.getInlineKeyboardMarkup());
         bot.execute(editMessageText);
 
-        // Подтверждаем callback, если он передан
         if (callbackQuery != null) {
             AnswerCallbackQuery answer = new AnswerCallbackQuery(callbackQuery.id());
             bot.execute(answer);

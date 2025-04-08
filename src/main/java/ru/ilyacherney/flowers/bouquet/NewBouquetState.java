@@ -61,9 +61,6 @@ public class NewBouquetState implements State {
 
     @Override
     public String getDisplayName() {
-//        if (bouquetService.getActiveBouquet() != null) {
-//            return bouquetService.getActiveBouquet().toString();
-//        }
         return "Выберете цветы для нового букета";
     }
 

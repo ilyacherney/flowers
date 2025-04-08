@@ -45,7 +45,6 @@ public class FlowersState implements State {
             long cultivarId = Long.parseLong(data.substring("add_flower_of_cultivar_id:".length()));
             Cultivar cultivar = cultivarService.getCultivarById(cultivarId);
             flowerService.createFlower(cultivar);
-            // Рендерим с callbackQuery для подтверждения
             renderer.render(this, chatId, editingMessageId, update.callbackQuery());
         }
 
@@ -53,7 +52,6 @@ public class FlowersState implements State {
             long cultivarId = Long.parseLong(data.substring("remove_flower_of_cultivar_id:".length()));
             Cultivar cultivar = cultivarService.getCultivarById(cultivarId);
             flowerService.deleteByCultivarId(cultivar.getId());
-            // Рендерим с callbackQuery для подтверждения
             renderer.render(this, chatId, editingMessageId, update.callbackQuery());
         }
     }

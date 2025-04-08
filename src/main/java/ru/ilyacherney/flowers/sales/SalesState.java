@@ -17,12 +17,10 @@ public class SalesState implements State {
 
     private final SaleService saleService;
     private final StateRenderer renderer;
-    private final BouquetService bouquetService;
 
-    public SalesState(SaleService saleService, StateRenderer renderer, BouquetService bouquetService) {
+    public SalesState(SaleService saleService, StateRenderer renderer) {
         this.saleService = saleService;
         this.renderer = renderer;
-        this.bouquetService = bouquetService;
     }
 
     @Override
